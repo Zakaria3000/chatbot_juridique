@@ -2,12 +2,17 @@ version: "3.1"
 
 rules:
 
-- rule: Say goodbye anytime the user says goodbye
+- rule: رد التحية عند التحية
   steps:
-  - intent: goodbye
-  - action: utter_goodbye
+  - intent: salutation
+  - action: utter_salutation
 
-- rule: Say 'I am a bot' anytime the user challenges
+- rule: قل وداعا عند توديع المستخدم
   steps:
-  - intent: bot_challenge
-  - action: utter_iamabot
+  - intent: وداع
+  - action: utter_وداع
+
+- rule: أخبر المستخدم أنك روبوت عندما يسأل
+  steps:
+  - intent: تحدي_البوت
+  - action: utter_تحدي_البوت

@@ -1,91 +1,63 @@
 version: "3.1"
 
 nlu:
-- intent: greet
+- intent: salutation
   examples: |
-    - hey
-    - hello
-    - hi
-    - hello there
-    - good morning
-    - good evening
-    - moin
-    - hey there
-    - let's go
-    - hey dude
-    - goodmorning
-    - goodevening
-    - good afternoon
+    - مرحبا
+    - أهلا
+    - السلام عليكم
+    - صباح الخير
+    - مساء الخير
+    - أهلا وسهلا
+    - كيف حالك؟
+    - مرحبا بك
+    - تحياتي
 
-- intent: goodbye
+- intent: وداع
   examples: |
-    - cu
-    - good by
-    - cee you later
-    - good night
-    - bye
-    - goodbye
-    - have a nice day
-    - see you around
-    - bye bye
-    - see you later
+    - وداعا
+    - إلى اللقاء
+    - أراك لاحقًا
+    - مع السلامة
+    - في أمان الله
+    - تصبح على خير
+    - يوم سعيد
 
-- intent: affirm
+- intent: تأكيد
   examples: |
-    - yes
-    - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
+    - نعم
+    - بالتأكيد
+    - صحيح
+    - بالطبع
+    - أكيد
 
-- intent: deny
+- intent: نفي
   examples: |
-    - no
-    - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
+    - لا
+    - مستحيل
+    - غير صحيح
+    - لا أعتقد ذلك
+    - ليس حقا
 
-- intent: mood_great
+- intent: مزاج_جيد
   examples: |
-    - perfect
-    - great
-    - amazing
-    - feeling like a king
-    - wonderful
-    - I am feeling very good
-    - I am great
-    - I am amazing
-    - I am going to save the world
-    - super stoked
-    - extremely good
-    - so so perfect
-    - so good
-    - so perfect
+    - أشعر أنني رائع
+    - أنا سعيد جدا
+    - يومي كان ممتازا
+    - كل شيء رائع
+    - أنا في غاية السعادة
 
-- intent: mood_unhappy
+- intent: مزاج_سيئ
   examples: |
-    - my day was horrible
-    - I am sad
-    - I don't feel very well
-    - I am disappointed
-    - super sad
-    - I'm so sad
-    - sad
-    - very sad
-    - unhappy
-    - not good
-    - not very good
-    - extremly sad
-    - so saad
-    - so sad
+    - أشعر بالحزن
+    - يومي كان سيئا
+    - أنا مكتئب
+    - لست بخير
+    - متضايق جدا
 
-- intent: bot_challenge
+- intent: تحدي_البوت
   examples: |
-    - are you a bot?
-    - are you a human?
-    - am I talking to a bot?
-    - am I talking to a human?
+    - هل أنت روبوت؟
+    - هل أنت إنسان؟
+    - هل أتكلم مع إنسان؟
+    - هل أنت ذكاء اصطناعي؟
