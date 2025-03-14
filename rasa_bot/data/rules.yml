@@ -1,18 +1,45 @@
 version: "3.1"
 
 rules:
-
-- rule: رد التحية عند التحية
+- rule: Say hello when the user greets
   steps:
-  - intent: salutation
-  - action: utter_salutation
+  - intent: greet
+  - action: utter_greet
 
-- rule: قل وداعا عند توديع المستخدم
+- rule: Say goodbye when the user says goodbye
   steps:
-  - intent: وداع
-  - action: utter_وداع
+  - intent: goodbye
+  - action: utter_goodbye
 
-- rule: أخبر المستخدم أنك روبوت عندما يسأل
+- rule: Answer when the user asks a legal question
   steps:
-  - intent: تحدي_البوت
-  - action: utter_تحدي_البوت
+  - intent: ask_legal_question
+  - action: action_answer_legal_question
+
+- rule: Start case analysis when user wants to analyze a case
+  steps:
+  - intent: analyze_case
+  - action: utter_ask_for_case_description
+  - action: action_listen
+
+- rule: Analyze a case after receiving the description
+  condition:
+  - slot_was_set:
+      case_description: true
+  steps:
+  - action: action_analyze_legal_case
+
+- rule: Explain a law when user requests explanation
+  steps:
+  - intent: explain_law
+  - action: action_explain_law
+
+- rule: Show sources when user asks for them
+  steps:
+  - intent: ask_sources
+  - action: action_show_sources
+
+- rule: Tell capabilities when user asks what bot can do
+  steps:
+  - intent: bot_capability
+  - action: utter_capabilities

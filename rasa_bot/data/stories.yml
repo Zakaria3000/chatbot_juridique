@@ -1,30 +1,43 @@
 version: "3.1"
 
 stories:
-
-- story: happy path
+- story: User asks a legal question and then wants to know sources
   steps:
   - intent: greet
   - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
-
-- story: sad path 1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
-
-- story: sad path 2
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: deny
+  - intent: ask_legal_question
+  - action: action_answer_legal_question
+  - intent: ask_sources
+  - action: action_show_sources
+  - intent: goodbye
   - action: utter_goodbye
+
+- story: User requests case analysis
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: analyze_case
+  - action: utter_ask_for_case_description
+  - user: |
+      لدي نزاع مع جاري حول حدود الأرض. لقد قام ببناء جدار يتعدى على أرضي بمقدار متر. لدي وثائق ملكية تثبت حدود أرضي.
+  - slot_was_set:
+      case_description: لدي نزاع مع جاري حول حدود الأرض. لقد قام ببناء جدار يتعدى على أرضي بمقدار متر. لدي وثائق ملكية تثبت حدود أرضي.
+  - action: action_analyze_legal_case
+  - intent: ask_sources
+  - action: action_show_sources
+
+- story: User asks for explanation of a law
+  steps:
+  - intent: explain_law
+  - slot_was_set:
+      law_query: قانون العمل
+  - action: action_explain_law
+  - intent: ask_legal_question
+  - action: action_answer_legal_question
+
+- story: User asks about bot capabilities and then asks a legal question
+  steps:
+  - intent: bot_capability
+  - action: utter_capabilities
+  - intent: ask_legal_question
+  - action: action_answer_legal_question
