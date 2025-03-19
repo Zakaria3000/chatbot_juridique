@@ -10,10 +10,12 @@ sys.path.append (os.path.dirname (os.path.dirname (os.path.dirname (os.path.absp
 from rag_system.query_rag import LegalRagSystem
 
 # Initialize the RAG system
-LLAMA_MODEL_PATH = os.getenv ("LLAMA_MODEL_PATH", "/path/to/llama-3-8b.gguf")
-VECTOR_STORE_PATH = os.getenv ("VECTOR_STORE_PATH", "embeddings/law_faiss_index")
+# Initialize the RAG system with Ollama URL
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:12345")  # URL de l'API Ollama
+VECTOR_STORE_PATH = os.getenv("VECTOR_STORE_PATH", "embeddings/law_faiss_index")
 
-rag_system = LegalRagSystem (LLAMA_MODEL_PATH, VECTOR_STORE_PATH)
+# Initialiser le système RAG avec l'URL Ollama
+rag_system = LegalRagSystem(model_name="llama3", vector_store_path=VECTOR_STORE_PATH, ollama_url=OLLAMA_URL)
 
 
 class ActionAnswerLegalQuestion (Action) :

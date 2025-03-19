@@ -3,32 +3,81 @@ version: "3.1"
 intents:
   - greet
   - goodbye
-  - affirm
-  - deny
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
+  - ask_legal_question
+  - analyze_case
+  - explain_law
+  - ask_sources
+  - bot_capability
+
+entities:
+  - crime
+  - topic
+  - law_type
+
+slots:
+  case_description:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_text
+      conditions:
+      - active_loop: case_form
+        requested_slot: case_description
+
+  law_query:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: law_type
+
+  sources:
+    type: list
+    influence_conversation: false
+    mappings:
+    - type: custom
+
+  legal_basis:
+    type: list
+    influence_conversation: false
+    mappings:
+    - type: custom
+
+forms:
+  case_form:
+    required_slots:
+      - case_description
 
 responses:
   utter_greet:
-  - text: "Hey! How are you?"
-
-  utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
-
-  utter_did_that_help:
-  - text: "Did that help you?"
-
-  utter_happy:
-  - text: "Great, carry on!"
+    - text: "مرحبا! أنا المساعد القانوني الخاص بك. كيف يمكنني مساعدتك اليوم؟"
+    - text: "أهلاً وسهلاً! أنا هنا لمساعدتك في استفساراتك القانونية. كيف يمكنني خدمتك؟"
 
   utter_goodbye:
-  - text: "Bye"
+    - text: "مع السلامة! شكراً لاستخدامك المساعد القانوني."
+    - text: "إلى اللقاء! أتمنى أن أكون قد ساعدتك."
 
-  utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
+  utter_ask_for_case_description:
+    - text: "يرجى وصف القضية أو الحالة القانونية التي تريد تحليلها بالتفصيل."
+    - text: "لكي أقدم تحليلاً دقيقاً، أحتاج إلى معرفة تفاصيل القضية. يرجى وصفها بشكل كامل."
+
+  utter_capabilities:
+    - text: "أنا مساعد قانوني ذكي يمكنني: \n1. الإجابة على أسئلتك القانونية \n2. تحليل القضايا وتقديم آراء قانونية \n3. شرح القوانين والتشريعات \n4. ذكر مصادر المعلومات القانونية التي استخدمتها"
+
+  utter_default:
+    - text: "عذراً، لم أفهم طلبك. هل يمكنك إعادة صياغته بطريقة أخرى؟"
+
+actions:
+  - action_answer_legal_question
+  - action_analyze_legal_case
+  - action_explain_law
+  - action_show_sources
+  - utter_greet
+  - utter_goodbye
+  - utter_ask_for_case_description
+  - utter_capabilities
+  - utter_default
 
 session_config:
-  session_expiration_time: 60
+  session_expiration_time: 60  # minutes
   carry_over_slots_to_new_session: true

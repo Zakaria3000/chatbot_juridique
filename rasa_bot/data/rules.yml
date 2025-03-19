@@ -25,7 +25,7 @@ rules:
 - rule: Analyze a case after receiving the description
   condition:
   - slot_was_set:
-      case_description: true
+      - case_description
   steps:
   - action: action_analyze_legal_case
 

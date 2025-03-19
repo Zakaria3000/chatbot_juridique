@@ -2,11 +2,17 @@ import pymupdf
 import os
 
 def extract_text_from_pdf(pdf_path):
-    """ Extrait le texte brut d'un fichier PDF """
+    """ Extrait le texte brut d'un fichier PDF avec un meilleur traitement du texte arabe """
     text = ""
     with pymupdf.open(pdf_path) as doc:
         for page in doc:
-            text += page.get_text("text") + "\n"
+            # Utilisation de paramètres améliorés pour le texte arabe
+            page_text = page.get_text(
+                "text",
+                sort=True,  # Trie le texte selon l'ordre de lecture
+                flags=0      # Utilise les flags par défaut qui fonctionnent mieux pour l'arabe
+            )
+            text += page_text + "\n"
     return text.strip()
 
 def process_all_pdfs(input_folder, output_file):
@@ -15,6 +21,7 @@ def process_all_pdfs(input_folder, output_file):
     for file in os.listdir(input_folder):
         if file.endswith(".pdf"):
             file_path = os.path.join(input_folder, file)
+            print(f"Traitement de {file}...")
             all_text += extract_text_from_pdf(file_path) + "\n\n"
 
     with open(output_file, "w", encoding="utf-8") as f:

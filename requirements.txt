@@ -17,3 +17,7 @@ rasa-sdk>=3.6.0
 
 # Arabic language support
 pyarabic>=0.6.15
+
+#flask
+flask==2.3.3
+flask-cors==4.0.0

@@ -75,8 +75,7 @@ class LegalRagSystem :
 
         # Load vector store
         try :
-            self.vector_store = FAISS.load_local (vector_store_path, self.embeddings,
-                                                  allow_dangerous_deserialization=True)
+            self.vector_store = FAISS.load_local(vector_store_path, self.embeddings)
             print (f"✅ Base de données vectorielle chargée depuis {vector_store_path}")
         except Exception as e :
             print (f"⚠️ Erreur lors du chargement de la base de données vectorielle: {e}")

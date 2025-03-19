@@ -21,7 +21,7 @@ stories:
   - user: |
       لدي نزاع مع جاري حول حدود الأرض. لقد قام ببناء جدار يتعدى على أرضي بمقدار متر. لدي وثائق ملكية تثبت حدود أرضي.
   - slot_was_set:
-      case_description: لدي نزاع مع جاري حول حدود الأرض. لقد قام ببناء جدار يتعدى على أرضي بمقدار متر. لدي وثائق ملكية تثبت حدود أرضي.
+      - case_description  # ✅ Corrected format
   - action: action_analyze_legal_case
   - intent: ask_sources
   - action: action_show_sources
@@ -30,7 +30,7 @@ stories:
   steps:
   - intent: explain_law
   - slot_was_set:
-      law_query: قانون العمل
+      - law_query  # ✅ Corrected format
   - action: action_explain_law
   - intent: ask_legal_question
   - action: action_answer_legal_question
