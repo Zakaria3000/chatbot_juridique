@@ -8,7 +8,7 @@ import json
 
 
 class ArabertEmbeddings:
-    def __init__(self, model_name="aubmindlab/bert-base-arabertv2"):
+    def _init_(self, model_name="aubmindlab/bert-base-arabertv2"):
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         self.model = AutoModel.from_pretrained(model_name)
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -70,8 +70,10 @@ def build_embeddings():
             chunks = chunk_text(doc)
 
             for j, chunk in enumerate(chunks):
+                chunk_id = f"doc_{i}chunk{j}"
                 metadata = {
-                    "source": f"doc_{i}_chunk_{j}",
+                    "id": chunk_id,
+                    "source": f"doc_{i}chunk{j}",
                     "chunk": j,
                     "document": i
                 }
@@ -110,5 +112,5 @@ def build_embeddings():
         json.dump(metadata, f, ensure_ascii=False, indent=2)
 
 
-if __name__ == "__main__":
+if __name__ == "_main_":
     build_embeddings()

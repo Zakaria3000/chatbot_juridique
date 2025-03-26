@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المساعد القانوني الذكي</title>
+    <style>
+        :root {
+            --primary-color: #5e35b1;         /* Mauve foncé */
+            --primary-light: #7e57c2;         /* Mauve plus clair */
+            --primary-dark: #4527a0;          /* Mauve plus sombre */
+            --accent-color: #9575cd;          /* Accent mauve */
+            --accent-light: #b39ddb;          /* Accent mauve clair */
+            --light-color: #f5f3ff;           /* Arrière-plan très clair */
+            --text-light: #ffffff;            /* Texte clair */
+            --text-dark: #2c2c2c;             /* Texte foncé */
+            --border-color: #d1c4e9;          /* Couleur de bordure */
+            --success-color: #4caf50;         /* Vert pour les succès */
+            --warning-color: #ff9800;         /* Orange pour les alertes */
+            --danger-color: #f44336;          /* Rouge pour les erreurs */
+            --shadow-color: rgba(94, 53, 177, 0.2); /* Ombre avec couleur mauve */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: var(--text-light);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.15), transparent 70%);
+            pointer-events: none;
+        }
+
+        header h1 {
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px var(--shadow-color);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .chat-sidebar {
+            width: 100%;
+            background-color: var(--light-color);
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+        }
+
+        .chat-modes {
+            display: flex;
+            gap: 12px;
+        }
+
+        .mode-btn {
+            background-color: var(--primary-light);
+            color: var(--text-light);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+
+        .mode-btn i {
+            font-size: 0.9rem;
+        }
+
+        .mode-btn.active {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .mode-btn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            min-height: 400px;
+            max-height: 600px;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            position: relative;
+            word-break: break-word;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            line-height: 1.7;
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: var(--text-light);
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+
+        .bot-message {
+            background-color: var(--light-color);
+            color: var(--text-dark);
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+            border-right: 3px solid var(--primary-light);
+        }
+
+        .bot-message h3 {
+            color: var(--primary-dark);
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .bot-message ul, .bot-message ol {
+            padding-right: 1.5rem;
+            margin: 0.8rem 0;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+            text-align: left;
+        }
+
+        .sources {
+            margin-top: 0.8rem;
+            font-size: 0.8rem;
+            color: var(--primary-dark);
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+
+        .source-item {
+            padding: 0.3rem 0;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 1.2rem;
+            background-color: var(--light-color);
+            border-top: 1px solid var(--border-color);
+            gap: 12px;
+        }
+
+        .chat-input textarea {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            resize: none;
+            font-size: 1rem;
+            height: 60px;
+            direction: rtl;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .chat-input textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+
+        .chat-input button {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: var(--text-light);
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-input button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: var(--text-light);
+            margin-top: auto;
+        }
+
+        .case-input, .law-input {
+            display: none;
+            margin-top: 1rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .case-input.active, .law-input.active {
+            display: block;
+        }
+
+        .input-label {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            display: block;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .typing-indicator span {
+            animation: blink 1.4s infinite both;
+            height: 5px;
+            width: 5px;
+            border-radius: 50%;
+            background-color: var(--text-dark);
+            display: inline-block;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes blink {
+            0% { opacity: 0.2; }
+            20% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 1rem;
+            }
+
+            .chat-sidebar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .chat-modes {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+        }
+
+        /* Badge pour l'info IA */
+        .ai-badge {
+            background-color: var(--accent-light);
+            color: var(--primary-dark);
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Bouton flottant d'aide */
+        .help-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #4527a0;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .help-button:hover {
+            transform: scale(1.1);
+        }
+
+        .help-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            left: 0;
+            width: 200px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .help-button:hover .help-tooltip {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        .logo-container {
+            margin-bottom: 1rem;
+        }
+
+        .logo {
+            height: 100px; /* Ajustez la taille selon vos besoins */
+            max-width: 100%;
+        }
+
+        .header-text {
+            text-align: center;
+        }
+
+        /* Pour un affichage plus propre sur les grands écrans, vous pouvez utiliser un layout flexbox */
+        @media (min-width: 768px) {
+            header {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .logo-container {
+                margin-left: 1.5rem;
+                margin-bottom: 0;
+            }
+
+            .header-text {
+                flex: 1;
+            }
+        }
+
+        /* Styles pour le panneau d'aide */
+        .help-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 600px;
+            background-color: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            z-index: 1000;
+            max-height: 80vh;
+            overflow-y: auto;
+
+        }
+
+        .help-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .help-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .help-panel-title {
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .close-panel {
+            background: transparent;
+            border: none;
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .close-panel:hover {
+            background-color: var(--accent-light);
+        }
+
+        .help-panel-content {
+            line-height: 1.8;
+        }
+
+        .help-panel-content h3 {
+            color: var(--primary-color);
+            margin: 1rem 0 0.8rem;
+        }
+
+        .help-panel-content p {
+            margin-bottom: 1rem;
+        }
+
+        .help-panel-content ul, .help-panel-content ol {
+            padding-right: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .help-panel-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Overlay pour le fond sombre lorsque le panneau est ouvert */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="./static/images/logo1.png" alt="شعار المساعد القانوني الذكي" class="logo">
+        </div>
+        <div class="header-text">
+            <h1> المساعد القانوني الذكي</h1>
+            <p>مستشارك القانوني الشخصي - حلول قانونية ذكية ودقيقة لكافة احتياجاتك</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="chat-container">
+            <div class="chat-sidebar">
+                <div class="chat-modes">
+                    <button class="mode-btn active" data-mode="general">
+                        <i class="fas fa-comments"></i> استشارة عامة
+                    </button>
+                    <button class="mode-btn" data-mode="case">
+                        <i class="fas fa-balance-scale"></i> تحليل قضية
+                    </button>
+                    <button class="mode-btn" data-mode="law">
+                        <i class="fas fa-book-open"></i> شرح قانون
+                    </button>
+                </div>
+                <div class="chat-info">
+                    <button id="clear-chat" class="mode-btn">
+                        <i class="fas fa-trash"></i> مسح المحادثة
+                    </button>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot-message">
+                    <div class="ai-badge"><i class="fas fa-robot"></i> المساعد الذكي</div>
+                    مرحباً بك في المساعد القانوني الذكي! كيف يمكنني مساعدتك اليوم؟
+                    <div class="message-time" id="current-time"></div>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <textarea id="user-input" placeholder="اكتب سؤالك هنا..."></textarea>
+                <div id="case-input" class="case-input">
+                    <label class="input-label">الرجاء وصف القضية القانونية بالتفصيل</label>
+                </div>
+                <div id="law-input" class="law-input">
+                    <label class="input-label">ما هو القانون الذي تريد شرحه؟</label>
+                </div>
+                <button id="send-btn">
+                    <i class="fas fa-paper-plane"></i> إرسال
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Ajout du bouton d'aide flottant -->
+    <div class="help-button" id="help-button">
+        <i class="fas fa-question"></i>
+        <div class="help-tooltip">اضغط للحصول على مساعدة في استخدام المساعد القانوني</div>
+    </div>
+
+    <!-- Ajout du panneau d'aide -->
+    <div class="overlay" id="overlay"></div>
+    <div class="help-panel" id="help-panel">
+        <div class="help-panel-header">
+            <div class="help-panel-title">مساعدة</div>
+            <button class="close-panel" id="close-panel">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h3>كيفية استخدام المساعد القانوني</h3>
+            <p>يمكنك استخدام المساعد القانوني بثلاث طرق مختلفة:</p>
+            <ol>
+                <li><strong>استشارة عامة:</strong> اكتب سؤالك القانوني مباشرة في مربع الدردشة.</li>
+                <li><strong>تحليل قضية:</strong> اختر وضع "تحليل قضية" لتقديم تفاصيل قضيتك ويقوم المساعد بتحليلها قانونياً.</li>
+                <li><strong>شرح قانون:</strong> اختر وضع "شرح قانون" للحصول على توضيح مفصل لمواد وأحكام القانون الذي تهتم به.</li>
+            </ol>
+            <p>تذكر أن هذا المساعد يقدم معلومات عامة، وننصح بالرجوع إلى محامٍ مختص للحالات الخاصة.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 المستشار القانوني الذكي - جميع المعلومات المقدمة هي للأغراض التوضيحية فقط ولا تعتبر استشارة قانونية رسمية.</p>
+    </footer>
+
+  <script>
+    function updateTime() {
+      let now = new Date();
+      let hours = now.getHours().toString().padStart(2, '0');
+      let minutes = now.getMinutes().toString().padStart(2, '0');
+      document.getElementById("current-time").innerText = `الوقت الحالي: ${hours}:${minutes}`;
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const chatMessages = document.getElementById('chat-messages');
+      const userInput = document.getElementById('user-input');
+      const sendBtn = document.getElementById('send-btn');
+      const clearChat = document.getElementById('clear-chat');
+      const modeBtns = document.querySelectorAll('.mode-btn');
+      let currentMode = 'general';
+
+      modeBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          currentMode = this.getAttribute('data-mode');
+          modeBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          if (currentMode === 'general') {
+            userInput.placeholder = "اكتب سؤالك هنا...";
+          } else if (currentMode === 'case') {
+            userInput.placeholder = "اكتب وصفاً تفصيلياً للقضية القانونية هنا...";
+          } else if (currentMode === 'law') {
+            userInput.placeholder = "اكتب استفسارك حول القانون المحدد هنا...";
+          }
+        });
+      });
+
+      function addMessage(text, isUser = false, sources = []) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
+
+        if (!isUser) {
+          const aiBadge = document.createElement('div');
+          aiBadge.classList.add('ai-badge');
+          aiBadge.innerHTML = 'المساعد الذكي';
+          messageDiv.appendChild(aiBadge);
+        }
+        const contentDiv = document.createElement('div');
+        contentDiv.innerHTML = text;
+        messageDiv.appendChild(contentDiv);
+
+        if (sources && sources.length > 0) {
+          const sourcesDiv = document.createElement('div');
+          sourcesDiv.innerHTML = '<strong>المصادر:</strong><ul>' +
+            sources.map(s => `<li>${s}</li>`).join('') +
+            '</ul>';
+          messageDiv.appendChild(sourcesDiv);
+        }
+
+        const timeDiv = document.createElement('div');
+        timeDiv.classList.add('message-time');
+        timeDiv.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        messageDiv.appendChild(timeDiv);
+
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function sendMessage() {
+        const message = userInput.value.trim();
+        if (!message) return;
+        let displayMessage = message;
+        if (currentMode === 'case') {
+          displayMessage = "تحليل القضية: " + message;
+        } else if (currentMode === 'law') {
+          displayMessage = "استفسار قانوني: " + message;
+        }
+        addMessage(displayMessage, true);
+        userInput.value = '';
+
+        const typingDiv = document.createElement('div');
+        typingDiv.classList.add('message', 'bot-message');
+        const aiBadge = document.createElement('div');
+        aiBadge.classList.add('ai-badge');
+        aiBadge.innerHTML = 'المساعد الذكي';
+        typingDiv.appendChild(aiBadge);
+        const typingContent = document.createElement('div');
+        typingContent.innerHTML = 'جاري الكتابة<span>.</span><span>.</span><span>.</span>';
+        typingDiv.appendChild(typingContent);
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        let endpoint = '/api/query';
+        let payload = { query: message };
+        if (currentMode === 'case') {
+          endpoint = '/api/analyze-case';
+          payload = { case: message };
+        } else if (currentMode === 'law') {
+          endpoint = '/api/explain-law';
+          payload = { law: message };
+        }
+
+        fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(response => {
+          if (!response.ok) throw new Error("Network response was not ok");
+          return response.json();
+        })
+        .then(data => {
+          chatMessages.removeChild(typingDiv);
+          let botResponse = '';
+          let sources = [];
+          if (currentMode === 'general') {
+            botResponse = data.answer || '<p>عفواً، حدث خطأ في معالجة استفسارك.</p>';
+            sources = data.sources || [];
+          } else if (currentMode === 'case') {
+            botResponse = data.decision || '<p>عفواً، لم يتمكن النظام من تحليل القضية.</p>';
+            sources = data.sources || [];
+          } else if (currentMode === 'law') {
+            botResponse = data.explanation || '<p>عفواً، لم يتمكن النظام من تقديم شرح للقانون.</p>';
+            sources = data.sources || [];
+          }
+          addMessage(botResponse, false, sources);
+        })
+        .catch(error => {
+          chatMessages.removeChild(typingDiv);
+          console.error('Fetch error:', error);
+          addMessage('<p>عفواً، تعذر الوصول إلى الخادم.</p>', false);
+        });
+      }
+
+      sendBtn.addEventListener('click', sendMessage);
+      userInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+      clearChat.addEventListener('click', function() {
+        while (chatMessages.childNodes.length > 1) {
+          chatMessages.removeChild(chatMessages.lastChild);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
