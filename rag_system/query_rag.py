@@ -47,7 +47,7 @@ class ArabertEmbeddings :
             return self.embed_query (text)
 
 class LegalRagSystem :
-    def __init__(self, model_name="llama3", vector_store_path="embeddings/law_faiss_index",
+    def __init__(self, model_name="llama3:latest", vector_store_path="embeddings/law_faiss_index",
                  ollama_url="http://localhost:12345") :
         # Use Ollama API endpoint instead of loading model directly
         self.model_name = model_name
@@ -123,6 +123,8 @@ class LegalRagSystem :
 
         # Create prompt for Llama
         prompt = f"""
+        يجب عليك الرد باللغة العربية حصريًا
+        
         أنت مساعد قانوني ذكي متخصص في القانون العربي. يرجى استخدام المعلومات القانونية أدناه للإجابة على السؤال.
 
         المعلومات القانونية:
@@ -153,6 +155,7 @@ class LegalRagSystem :
 
         # Create prompt for Llama
         prompt = f"""
+        يجب عليك الرد باللغة العربية حصريًا
         أنت قاضٍ متمرس في القانون العربي. يرجى تحليل الحالة المعروضة وإصدار قرار قضائي مستند على القوانين والسوابق القضائية ذات الصلة.
 
         النصوص القانونية ذات الصلة:
@@ -185,6 +188,7 @@ class LegalRagSystem :
 
         # Create prompt for Llama
         prompt = f"""
+        يجب عليك الرد باللغة العربية حصريًا
         أنت خبير قانوني متخصص في شرح القوانين والتشريعات. يرجى شرح القانون أو اللائحة المطلوبة بلغة واضحة وسهلة الفهم.
 
         النصوص القانونية ذات الصلة:

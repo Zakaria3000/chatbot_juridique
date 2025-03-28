@@ -521,6 +521,56 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        /* Arabic Keyboard Styles */
+.arabic-keyboard {
+    display: none;
+    width: 100%;
+    background-color: var(--light-color);
+    border-top: 1px solid var(--border-color);
+    padding: 0.5rem;
+    overflow-x: auto;
+}
+
+.arabic-keyboard.active {
+    display: block;
+}
+
+.keyboard-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+}
+
+.keyboard-key {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    padding: 6px 8px;
+    margin: 1px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+    min-width: 30px;
+    text-align: center;
+}
+
+.keyboard-key:hover {
+    background-color: var(--accent-light);
+}
+
+.keyboard-key.space,
+.keyboard-key.delete,
+.keyboard-key.close {
+    background-color: var(--primary-light);
+    color: white;
+}
+
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -543,9 +593,7 @@
                     <button class="mode-btn active" data-mode="general">
                         <i class="fas fa-comments"></i> استشارة عامة
                     </button>
-                    <button class="mode-btn" data-mode="case">
-                        <i class="fas fa-balance-scale"></i> تحليل قضية
-                    </button>
+
                     <button class="mode-btn" data-mode="law">
                         <i class="fas fa-book-open"></i> شرح قانون
                     </button>
@@ -578,6 +626,51 @@
                 </button>
             </div>
         </div>
+        <div class="arabic-keyboard" id="arabic-keyboard">
+    <div class="keyboard-row">
+        <div class="keyboard-key" data-key="ذ">ذ</div>
+        <div class="keyboard-key" data-key="ض">ض</div>
+        <div class="keyboard-key" data-key="ص">ص</div>
+        <div class="keyboard-key" data-key="ث">ث</div>
+        <div class="keyboard-key" data-key="ق">ق</div>
+        <div class="keyboard-key" data-key="ف">ف</div>
+        <div class="keyboard-key" data-key="غ">غ</div>
+        <div class="keyboard-key" data-key="ع">ع</div>
+        <div class="keyboard-key" data-key="ه">ه</div>
+        <div class="keyboard-key" data-key="خ">خ</div>
+        <div class="keyboard-key" data-key="ح">ح</div>
+        <div class="keyboard-key" data-key="ج">ج</div>
+    </div>
+    <div class="keyboard-row">
+        <div class="keyboard-key" data-key="ش">ش</div>
+        <div class="keyboard-key" data-key="س">س</div>
+        <div class="keyboard-key" data-key="ي">ي</div>
+        <div class="keyboard-key" data-key="ب">ب</div>
+        <div class="keyboard-key" data-key="ل">ل</div>
+        <div class="keyboard-key" data-key="ا">ا</div>
+        <div class="keyboard-key" data-key="ت">ت</div>
+        <div class="keyboard-key" data-key="ن">ن</div>
+        <div class="keyboard-key" data-key="م">م</div>
+        <div class="keyboard-key" data-key="ك">ك</div>
+        <div class="keyboard-key" data-key="ط">ط</div>
+    </div>
+    <div class="keyboard-row">
+        <div class="keyboard-key" data-key="ء">ء</div>
+        <div class="keyboard-key" data-key="ؤ">ؤ</div>
+        <div class="keyboard-key" data-key="ر">ر</div>
+        <div class="keyboard-key" data-key="لا">لا</div>
+        <div class="keyboard-key" data-key="ى">ى</div>
+        <div class="keyboard-key" data-key="ة">ة</div>
+        <div class="keyboard-key" data-key="و">و</div>
+        <div class="keyboard-key" data-key="ز">ز</div>
+        <div class="keyboard-key" data-key="ظ">ظ</div>
+    </div>
+    <div class="keyboard-row">
+        <div class="keyboard-key delete">مسح</div>
+        <div class="keyboard-key space">مسافة</div>
+        <div class="keyboard-key close">إغلاق</div>
+    </div>
+</div>
     </main>
 
     <!-- Ajout du bouton d'aide flottant -->
@@ -702,22 +795,7 @@
                 messageDiv.innerHTML += text;
 
                 // Add sources if available
-                if (sources && sources.length > 0) {
-                    const sourcesDiv = document.createElement('div');
-                    sourcesDiv.classList.add('sources');
-                    sourcesDiv.innerHTML = '<strong>المصادر:</strong>';
 
-                    const sourcesList = document.createElement('ul');
-                    sources.forEach(source => {
-                        const sourceItem = document.createElement('li');
-                        sourceItem.classList.add('source-item');
-                        sourceItem.textContent = source;
-                        sourcesList.appendChild(sourceItem);
-                    });
-
-                    sourcesDiv.appendChild(sourcesList);
-                    messageDiv.appendChild(sourcesDiv);
-                }
 
                 // Add timestamp
                 const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -732,144 +810,94 @@
 
             // Send a message
             function sendMessage() {
-                const message = userInput.value.trim();
-                if (message) {
-                    // Prepend mode indicator if not in general mode
-                    let displayMessage = message;
-                    if (currentMode === 'case') {
-                        displayMessage = "تحليل القضية: " + message;
-                    } else if (currentMode === 'law') {
-                        displayMessage = "استفسار قانوني: " + message;
-                    }
-
-                    addMessage(displayMessage, true);
-                    userInput.value = '';
-
-                    // Show typing indicator
-                    const typingDiv = document.createElement('div');
-                    typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
-
-                    const aiBadge = document.createElement('div');
-                    aiBadge.classList.add('ai-badge');
-                    aiBadge.innerHTML = '<i class="fas fa-robot"></i> المساعد الذكي';
-                    typingDiv.appendChild(aiBadge);
-
-                    const typingContent = document.createElement('div');
-                    typingContent.innerHTML = 'جاري الكتابة<span>.</span><span>.</span><span>.</span>';
-                    typingDiv.appendChild(typingContent);
-
-                    chatMessages.appendChild(typingDiv);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-                    // Simulate API call to your backend with delay
-                    setTimeout(() => {
-                        // Remove typing indicator
-                        chatMessages.removeChild(typingDiv);
-
-                        // Here you would make an actual API call
-                        let botResponse = '';
-                        let fakeSources = [];
-
-                        if (currentMode === 'general') {
-                            if (message.includes('سلام') || message.includes('مرحبا')) {
-                                botResponse = 'وعليكم السلام! كيف يمكنني مساعدتك في استشارتك القانونية اليوم؟';
-                            } else if (message.toLowerCase().includes('حقوق') || message.includes('عمل')) {
-                                botResponse = `
-                                    <h3>حقوق العمل</h3>
-                                    <p>تتضمن حقوق العمل الأساسية وفقًا لقانون العمل:</p>
-                                    <ul>
-                                        <li>الحق في أجر عادل ومنصف</li>
-                                        <li>الحق في بيئة عمل آمنة وصحية</li>
-                                        <li>الحق في إجازة سنوية مدفوعة الأجر</li>
-                                        <li>الحق في التعويض عن إصابات العمل</li>
-                                        <li>الحق في التأمينات الاجتماعية</li>
-                                    </ul>
-                                    <p>هل تحتاج إلى معلومات محددة حول أي من هذه الحقوق؟</p>
-                                `;
-                                fakeSources = [
-                                    "قانون العمل رقم 12 لسنة 2003",
-                                    "أحكام محكمة النقض في قضايا العمل لعام 2022",
-                                    "اتفاقية منظمة العمل الدولية بشأن العمل اللائق"
-                                ];
-                            } else if (message.toLowerCase().includes('طلاق') || message.includes('زواج')) {
-                                botResponse = `
-                                    <h3>قانون الأحوال الشخصية</h3>
-                                    <p>فيما يتعلق بالطلاق والزواج، يجب مراعاة النقاط القانونية التالية:</p>
-                                    <ul>
-                                        <li>أنواع الطلاق المعترف بها قانونًا: الطلاق الرجعي، الطلاق البائن، الخلع</li>
-                                        <li>حقوق المرأة المالية بعد الطلاق: المهر المؤخر، النفقة، متعة الطلاق</li>
-                                        <li>حضانة الأطفال وترتيبات الرؤية</li>
-                                        <li>إجراءات توثيق الطلاق في المحكمة</li>
-                                    </ul>
-                                    <p>هل هناك جانب معين تود الاستفسار عنه بشكل أكثر تفصيلاً؟</p>
-                                `;
-                                fakeSources = [
-                                    "قانون الأحوال الشخصية رقم 25 لسنة 1929 وتعديلاته",
-                                    "قانون رقم 1 لسنة 2000 بشأن تنظيم بعض أوضاع وإجراءات التقاضي في مسائل الأحوال الشخصية"
-                                ];
-                            } else {
-                                botResponse = `
-                                    <p>شكرًا لاستفسارك. بناءً على سؤالك، أود أن أوضح أن المعلومات القانونية قد تختلف حسب الولاية القضائية والظروف الخاصة بكل حالة.</p>
-                                    <p>للحصول على استشارة مخصصة، يمكنني مساعدتك بفهم المبادئ القانونية العامة، لكن يُنصح بالتشاور مع محامٍ مؤهل لحالتك الخاصة.</p>
-                                    <p>هل يمكنك تقديم المزيد من التفاصيل حول استفسارك القانوني لأتمكن من تقديم معلومات أكثر دقة؟</p>
-                                `;
-                            }
-                        } else if (currentMode === 'case') {
-                            botResponse = `
-                                <h3>تحليل القضية</h3>
-                                <p>بناءً على المعلومات التي قدمتها حول قضيتك، إليك تحليلي القانوني الأولي:</p>
-                                <ol>
-                                    <li><strong>الإطار القانوني:</strong> تقع قضيتك ضمن نطاق قانون [نوع القانون المناسب].</li>
-                                    <li><strong>النقاط القانونية الرئيسية:</strong>
-                                        <ul>
-                                            <li>المسألة الأولى تتعلق بـ[نقطة قانونية]، حيث تنص المادة XX على [شرح مبسط].</li>
-                                            <li>يجب إثبات [عناصر الإثبات المطلوبة] لتعزيز موقفك.</li>
-                                        </ul>
-                                    </li>
-                                    <li><strong>الخطوات المقترحة:</strong>
-                                        <ul>
-                                            <li>جمع المستندات التالية: [قائمة المستندات].</li>
-                                            <li>التشاور مع محامٍ متخصص في [المجال القانوني].</li>
-                                            <li>النظر في إمكانية [خيار قانوني محتمل] قبل اللجوء للمحكمة.</li>
-                                        </ul>
-                                    </li>
-                                </ol>
-                                <p>ملاحظة: هذا التحليل أولي وعام، والتفاصيل الدقيقة لقضيتك قد تتطلب دراسة متعمقة من محامٍ مختص.</p>
-                            `;
-                            fakeSources = [
-                                "المادة XX من القانون المدني",
-                                "سوابق قضائية مشابهة: الطعن رقم XXXX لسنة YYYY",
-                                "مبادئ قانونية مستقرة من محكمة النقض"
-                            ];
-                        } else if (currentMode === 'law') {
-                            botResponse = `
-                                <h3>شرح القانون</h3>
-                                <p>فيما يتعلق باستفسارك عن القانون، إليك شرح مبسط للنقاط الرئيسية:</p>
-                                <ol>
-                                    <li><strong>نطاق تطبيق القانون:</strong> يسري هذا القانون على [نطاق التطبيق] ويهدف إلى [الهدف الرئيسي].</li>
-                                    <li><strong>المواد الأساسية:</strong>
-                                        <ul>
-                                            <li><strong>المادة X:</strong> تنص على [شرح المادة] وتهدف إلى [هدف المادة].</li>
-                                            <li><strong>المادة Y:</strong> تحدد [موضوع المادة] وتنظم [جوانب التنظيم].</li>
-                                        </ul>
-                                    </li>
-                                    <li><strong>التزامات وحقوق الأطراف:</strong> يفرض القانون [التزامات محددة] ويمنح [حقوق معينة].</li>
-                                    <li><strong>الإجراءات القانونية:</strong> يتطلب القانون اتباع [إجراءات معينة] في حالة [موقف معين].</li>
-                                    <li><strong>العقوبات والجزاءات:</strong> في حالة المخالفة، ينص القانون على [عقوبات محددة].</li>
-                                </ol>
-                                <p>هل ترغب في مزيد من التفاصيل حول جانب معين من هذا القانون؟</p>
-                            `;
-                            fakeSources = [
-                                "نص القانون المنشور في الجريدة الرسمية، العدد XX بتاريخ YY/YY/YYYY",
-                                "اللائحة التنفيذية للقانون رقم XX لسنة YYYY"
-                            ];
-                        }
-
-                        addMessage(botResponse, false, fakeSources);
-                    }, 1500);
-                }
+        const message = userInput.value.trim();
+        if (message) {
+            // Prepend mode indicator if not in general mode
+            let displayMessage = message;
+            if (currentMode === 'case') {
+                displayMessage = "تحليل القضية: " + message;
+            } else if (currentMode === 'law') {
+                displayMessage = "استفسار قانوني: " + message;
             }
 
+            addMessage(displayMessage, true);
+            userInput.value = '';
+
+            // Show typing indicator
+            const typingDiv = document.createElement('div');
+            typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
+
+            const aiBadge = document.createElement('div');
+            aiBadge.classList.add('ai-badge');
+            aiBadge.innerHTML = '<i class="fas fa-robot"></i> المساعد الذكي';
+            typingDiv.appendChild(aiBadge);
+
+            const typingContent = document.createElement('div');
+            typingContent.innerHTML = 'جاري الكتابة<span>.</span><span>.</span><span>.</span>';
+            typingDiv.appendChild(typingContent);
+
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Determine which API endpoint to call based on current mode
+            let apiEndpoint = '/api/query';
+            let requestBody = { query: message };
+
+            if (currentMode === 'case') {
+                apiEndpoint = '/api/analyze-case';
+                requestBody = { case: message };
+            } else if (currentMode === 'law') {
+                apiEndpoint = '/api/explain-law';
+                requestBody = { law: message };
+            }
+
+            // Make API call
+            fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Remove typing indicator
+                chatMessages.removeChild(typingDiv);
+
+                let botResponse = '';
+                let sources = [];
+
+                // Handle different response formats
+                if (data.error) {
+                    botResponse = `<p>حدث خطأ: ${data.error}</p>`;
+                } else if (currentMode === 'general') {
+                    botResponse = data.answer || data.response || '';
+                    sources = data.sources || [];
+                } else if (currentMode === 'case') {
+                    botResponse = `
+                        <h3>تحليل القضية</h3>
+                        <p>${data.decision || 'لم يتم توليد تحليل'}</p>
+                    `;
+                    sources = data.sources || [];
+                } else if (currentMode === 'law') {
+                    botResponse = `
+                        <h3>شرح القانون</h3>
+                        <p>${data.explanation || 'لم يتم توليد شرح'}</p>
+                    `;
+                    sources = data.sources || [];
+                }
+
+                addMessage(botResponse, false, sources);
+            })
+            .catch(error => {
+                // Remove typing indicator
+                chatMessages.removeChild(typingDiv);
+
+                console.error('Error:', error);
+                addMessage(`<p>حدث خطأ في الاتصال: ${error.message}</p>`, false);
+            });
+        }
+    }
             // Event listeners
             sendBtn.addEventListener('click', sendMessage);
             userInput.addEventListener('keypress', function(e) {
@@ -886,6 +914,59 @@
                 }
             });
         });
+        // Arabic Keyboard Functionality
+const arabicKeyboard = document.getElementById('arabic-keyboard');
+const userInput = document.getElementById('user-input');
+
+// Function to add keyboard functionality
+function setupArabicKeyboard() {
+
+    const keyboardKeys = document.querySelectorAll('.keyboard-key');
+
+    keyboardKeys.forEach(key => {
+        key.addEventListener('click', function() {
+            const keyValue = this.getAttribute('data-key');
+
+            if (this.classList.contains('delete')) {
+                // Delete last character
+                userInput.value = userInput.value.slice(0, -1);
+            } else if (this.classList.contains('space')) {
+                // Add space
+                userInput.value += ' ';
+            } else if (this.classList.contains('close')) {
+                // Close keyboard
+                arabicKeyboard.classList.remove('active');
+            } else if (keyValue) {
+                // Insert character at cursor position
+                const cursorPosition = userInput.selectionStart;
+                const textBefore = userInput.value.slice(0, cursorPosition);
+                const textAfter = userInput.value.slice(cursorPosition);
+                userInput.value = textBefore + keyValue + textAfter;
+
+                // Move cursor after inserted character
+                userInput.setSelectionRange(cursorPosition + keyValue.length, cursorPosition + keyValue.length);
+            }
+
+            userInput.focus();
+        });
+    });
+}
+
+// Add a keyboard toggle button in the chat input area
+const keyboardToggleBtn = document.createElement('button');
+keyboardToggleBtn.innerHTML = '<i class="fas fa-keyboard"></i>';
+keyboardToggleBtn.classList.add('mode-btn');
+keyboardToggleBtn.style.marginRight = '10px';
+keyboardToggleBtn.addEventListener('click', function() {
+    arabicKeyboard.classList.toggle('active');
+});
+
+// Insert the keyboard toggle button next to the send button
+const chatInput = document.querySelector('.chat-input');
+chatInput.insertBefore(keyboardToggleBtn, document.getElementById('send-btn'));
+
+// Setup keyboard functionality
+setupArabicKeyboard();
     </script>
 </body>
 </html>
