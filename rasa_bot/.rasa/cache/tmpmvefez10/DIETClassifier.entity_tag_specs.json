@@ -1,0 +1,36 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-crime",
+      "2": "I-crime",
+      "3": "L-crime",
+      "4": "U-crime",
+      "5": "B-law_type",
+      "6": "I-law_type",
+      "7": "L-law_type",
+      "8": "U-law_type",
+      "9": "B-topic",
+      "10": "I-topic",
+      "11": "L-topic",
+      "12": "U-topic",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-crime": 1,
+      "I-crime": 2,
+      "L-crime": 3,
+      "U-crime": 4,
+      "B-law_type": 5,
+      "I-law_type": 6,
+      "L-law_type": 7,
+      "U-law_type": 8,
+      "B-topic": 9,
+      "I-topic": 10,
+      "L-topic": 11,
+      "U-topic": 12,
+      "O": 0
+    },
+    "num_tags": 13
+  }
+]

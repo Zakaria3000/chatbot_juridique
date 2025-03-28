@@ -1,0 +1,61 @@
+{
+  "type": "MaxHistoryTrackerFeaturizer",
+  "state_featurizer": {
+    "action_texts": [],
+    "entity_tag_specs": [],
+    "feature_states": {
+      "intent": {
+        "analyze_case": 0,
+        "ask_legal_question": 1,
+        "ask_sources": 2,
+        "back": 3,
+        "bot_capability": 4,
+        "explain_law": 5,
+        "goodbye": 6,
+        "greet": 7,
+        "nlu_fallback": 8,
+        "out_of_scope": 9,
+        "restart": 10,
+        "session_start": 11
+      },
+      "action_name": {
+        "action_listen": 0,
+        "action_restart": 1,
+        "action_session_start": 2,
+        "action_default_fallback": 3,
+        "action_deactivate_loop": 4,
+        "action_revert_fallback_events": 5,
+        "action_default_ask_affirmation": 6,
+        "action_default_ask_rephrase": 7,
+        "action_two_stage_fallback": 8,
+        "action_unlikely_intent": 9,
+        "action_back": 10,
+        "...": 11,
+        "action_extract_slots": 12,
+        "action_answer_legal_question": 13,
+        "action_analyze_legal_case": 14,
+        "action_explain_law": 15,
+        "action_show_sources": 16,
+        "utter_greet": 17,
+        "utter_goodbye": 18,
+        "utter_ask_for_case_description": 19,
+        "utter_capabilities": 20,
+        "utter_default": 21,
+        "case_form": 22
+      },
+      "entities": {
+        "crime": 0,
+        "law_type": 1,
+        "topic": 2
+      },
+      "slots": {
+        "case_description_0": 0
+      },
+      "active_loop": {
+        "case_form": 0
+      }
+    }
+  },
+  "remove_duplicates": true,
+  "max_history": 5
+}
